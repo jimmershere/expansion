@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Marketplace Scout</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_run">Run sweep</string>
+    <string name="btn_stop">Stop</string>
+    <string name="btn_share">Share results</string>
+    <string name="status_idle">Log into Facebook, then Run sweep. Keep the app in the foreground while it works.</string>
+</resources>
