@@ -1,0 +1,123 @@
+# marketplace-scout configuration
+# Areas, comp metros, category queries, filters, pacing.
+
+# Facebook Marketplace city slugs to sweep for deals (the buy side).
+search_areas:
+  nc:
+    - raleigh
+    - charlotte
+    - greensboro
+    - winstonsalem
+    - fayetteville
+    - asheville
+    - wilmington
+
+# Northern-US metros used ONLY to build comparable-price medians (the value side).
+comp_metros:
+  - boston
+  - nyc
+  - philadelphia
+  - pittsburgh
+  - cleveland
+  - detroit
+  - chicago
+  - minneapolis
+  - milwaukee
+  - seattle
+  - portland
+
+# What to hunt. Each category is a list of Marketplace search queries.
+# Year bounds are applied via Marketplace's vehicle filters where possible
+# and re-checked after normalization.
+categories:
+  pickup_trucks:
+    max_year: 1999
+    queries:
+      - classic pickup truck
+      - chevy c10
+      - chevy k10 4x4
+      - square body chevy
+      - ford f100
+      - ford f150 obs
+      - dodge d100
+      - dodge ram cummins 12 valve
+      - toyota pickup 4x4
+      - gmc sierra classic
+
+  classic_cars:
+    max_year: 1985
+    queries:
+      - classic car
+      - chevelle
+      - camaro
+      - mustang fastback
+      - nova ss
+      - dodge charger
+      - plymouth barracuda
+      - pontiac gto
+      - oldsmobile 442
+      - vw beetle classic
+      - datsun 240z
+
+  import_tuners_90s:
+    min_year: 1988
+    max_year: 2002
+    queries:
+      - toyota supra
+      - mazda rx-7
+      - nissan 240sx
+      - nissan 300zx
+      - nissan skyline
+      - toyota mr2
+      - acura integra
+      - honda civic si
+      - honda prelude
+      - acura nsx
+      - mitsubishi eclipse gsx
+      - eagle talon tsi
+      - mitsubishi 3000gt
+      - subaru impreza wrx
+      - mitsubishi lancer evolution
+      - toyota celica all-trac
+      - mazda miata
+
+  custom_vehicles:
+    queries:
+      - restomod
+      - hot rod
+      - rat rod
+      - custom truck
+      - lifted truck
+      - lowrider
+      - engine swap
+      - ls swap
+      - pro street
+
+filters:
+  min_price: 1500          # below this on FB it's nearly all scams/parts cars
+  max_price: 60000
+  max_mileage: 250000
+  deal_threshold_pct: 15   # asking must be >= this % below comp median
+  min_comps: 5             # need at least this many comps to trust a median
+  comp_year_window: 3      # comps drawn from year +/- this
+  comp_trim_pct: 10        # drop top/bottom 10% of comp prices before median
+  blocked_keywords:        # listing dropped if title/description matches
+    - parts only
+    - no title
+    - bill of sale only
+    - scrap
+    - "*read*"             # classic bait-listing marker
+
+pacing:
+  min_delay_s: 2.0         # random sleep between page loads
+  max_delay_s: 6.0
+  max_cards_per_search: 40 # stop scrolling a search after this many cards
+  max_detail_pages: 120    # hard cap on listing detail fetches per run
+  headless: false          # FB is far less suspicious of headed browsers
+
+paths:
+  profile_dir: ~/.mscout/profile
+  cache_db: ~/.mscout/cache.sqlite3
+  gcp_service_account: ~/.mscout/gcp-service-account.json
+
+comp_cache_ttl_days: 14    # reuse comp medians this long before re-searching
