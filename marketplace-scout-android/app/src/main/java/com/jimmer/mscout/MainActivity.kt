@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.jimmer.mscout.export.Exporter
 import com.jimmer.mscout.web.MarketplaceDriver
 import com.jimmer.mscout.web.NotLoggedInException
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
@@ -80,6 +81,8 @@ class MainActivity : AppCompatActivity() {
                 status.text = "Done: ${result.dealCount} deals (of ${result.totalFound} " +
                     "found) ≥${com.jimmer.mscout.core.Config.Filters.dealThresholdPct}% " +
                     "below northern-US comps. Tap Share results."
+            } catch (e: CancellationException) {
+                throw e // user-requested Stop — stopSweep() already set the status
             } catch (e: NotLoggedInException) {
                 status.text = e.message
             } catch (e: Exception) {

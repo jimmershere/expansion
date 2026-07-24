@@ -2,6 +2,7 @@ package com.jimmer.mscout.core
 
 import android.content.Context
 import com.jimmer.mscout.web.MarketplaceDriver
+import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
 import java.io.File
 
@@ -68,6 +69,8 @@ class CompsEngine(private val driver: MarketplaceDriver, context: Context) {
                     val price = comp.askingPrice ?: continue
                     if (plausible(comp, listing)) prices.add(price)
                 }
+            } catch (e: CancellationException) {
+                throw e // Stop tapped — don't keep driving the WebView
             } catch (e: com.jimmer.mscout.web.NotLoggedInException) {
                 throw e // stop the whole run
             } catch (e: Exception) {

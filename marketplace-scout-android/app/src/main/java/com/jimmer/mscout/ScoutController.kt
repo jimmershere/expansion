@@ -8,6 +8,7 @@ import com.jimmer.mscout.core.Listing
 import com.jimmer.mscout.core.Normalize
 import com.jimmer.mscout.export.Exporter
 import com.jimmer.mscout.web.MarketplaceDriver
+import kotlinx.coroutines.CancellationException
 import java.io.File
 
 /** The Android equivalent of the desktop tool's `mscout run`. */
@@ -28,6 +29,8 @@ class ScoutController(
                     onStatus("[$catName] $area: \"$query\"")
                     val cards = try {
                         driver.search(area, query, cat.minYear, cat.maxYear)
+                    } catch (e: CancellationException) {
+                        throw e // Stop tapped — end the sweep, don't march on
                     } catch (e: com.jimmer.mscout.web.NotLoggedInException) {
                         throw e
                     } catch (e: Exception) {
@@ -54,11 +57,17 @@ class ScoutController(
             onStatus("detail ${i + 1}/${found.size}: ${l.title.take(40)}")
             driver.fetchDetail(l)
             Carfax.score(l)
+            // A card missing price/mileage passed the first filter pass; the
+            // detail page may have revealed values outside the bounds.
+            if (!basicsOk(l)) {
+                l.notes.add("dropped after detail: outside price/mileage bounds")
+                return@forEachIndexed
+            }
             comps.value(l, onStatus)
         }
 
         val deals = found.values.filter {
-            (it.belowMarketPct ?: -1.0) >= Config.Filters.dealThresholdPct
+            basicsOk(it) && (it.belowMarketPct ?: -1.0) >= Config.Filters.dealThresholdPct
         }
         val file = Exporter.writeXlsx(context, deals)
         return Result(file, deals.size, found.size)
