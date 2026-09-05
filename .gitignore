@@ -1,0 +1,4 @@
+
+# Generated web assets (rebuild with scripts/optimize-photos.py)
+photos/web/*
+!photos/web/.gitkeep

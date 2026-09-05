@@ -14,6 +14,9 @@ RAM/SSDs/PSUs/fans/harnesses).
 | [scripts/bootstrap-floor.sh](scripts/bootstrap-floor.sh) | One-shot new-node build: NVIDIA 535, Ollama (LAN), PyTorch cu121, k3s agent join |
 | [scripts/p40-health.sh](scripts/p40-health.sh) | GPU thermal/presence watchdog, JSON for n8n |
 | gitops/ | ArgoCD app-of-apps for new floors (populated once floor3 joins) |
+| [photos/](photos/README.md) | Appearance Unlimited restoration photos for appearance-unlimited.com + the fetch/optimize pipeline |
+| [scripts/fetch-fb-photos.sh](scripts/fetch-fb-photos.sh) | Pulls the Appearance Unlimited Facebook page photos into `photos/originals/` |
+| [scripts/optimize-photos.py](scripts/optimize-photos.py) | Responsive JPEG/WebP + manifest.json, strips EXIF/GPS |
 
 ## TL;DR
 
