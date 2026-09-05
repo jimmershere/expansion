@@ -60,18 +60,22 @@ def variant_of(stem: str):
 
 
 def name_for(path: Path):
-    """Output base name + pair variant for a source file.
+    """Pair-group key, proposed base name, and pair variant for a source file.
 
     Sources are discovered recursively and a Meta page export arrives as album
     folders, so the basename alone is not unique -- album1/IMG_0001.jpg and
     album2/IMG_0001.jpg would collide and overwrite each other. Fold the
     folders into the name. Detect the pair suffix on the RAW stem first:
     slugify() collapses the '--' separator.
+
+    The group key uses the real un-slugified path, so two folders that only
+    differ in punctuation (album-1/ vs album_1/) are still distinct groups
+    even though they propose the same base name.
     """
     rel = path.relative_to(SRC)
     raw_base, variant = variant_of(rel.stem.lower())
     parts = [slugify(p) for p in rel.parent.parts] + [slugify(raw_base)]
-    return "-".join(p for p in parts if p), variant
+    return (rel.parent, raw_base), "-".join(p for p in parts if p), variant
 
 
 def process(path: Path, stem: str, base: str, variant, force: bool):
@@ -137,16 +141,31 @@ def main():
         sys.exit(f"no source images in {SRC} -- run scripts/fetch-fb-photos.sh first")
 
     entries, failed, taken = [], [], {}
+    bases, used_bases = {}, {}
     for p in srcs:
-        base, variant = name_for(p)
+        key, proposed, variant = name_for(p)
+        if key not in bases:
+            # Disambiguate at the GROUP level, not per file: a before/after set
+            # shares one pair key, so suffixing each file separately would let
+            # two albums share a pair key (or split one album's set across two).
+            base, n = proposed, 2
+            while base in used_bases:
+                base, n = f"{proposed}-{n}", n + 1
+            if base != proposed:
+                print(f"  note {p.relative_to(SRC)} normalizes onto "
+                      f"{used_bases[proposed].relative_to(SRC)}, keying it {base}")
+            used_bases[base] = p
+            bases[key] = base
+        base = bases[key]
+
         stem = f"{base}-{variant}" if variant else base
-        if stem in taken:                          # distinct paths, same slug
-            n = 2
-            while f"{stem}-{n}" in taken:
-                n += 1
+        if stem in taken:                          # e.g. x--before.jpg vs x-before.jpg
+            uniq, n = stem, 2
+            while uniq in taken:
+                uniq, n = f"{stem}-{n}", n + 1
             print(f"  note {p.relative_to(SRC)} collides with "
-                  f"{taken[stem].relative_to(SRC)}, naming it {stem}-{n}")
-            stem = f"{stem}-{n}"
+                  f"{taken[stem].relative_to(SRC)}, naming it {uniq}")
+            stem = uniq
         taken[stem] = p
         try:
             entries.append(process(p, stem, base, variant, args.force))
