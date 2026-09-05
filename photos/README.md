@@ -57,14 +57,21 @@ customer would describe the car, not `IMG_4821`.
 ## 3. Build the web assets
 
 ```bash
-python3 -m pip install Pillow
+python3 -m pip install Pillow pillow-heif
 python3 scripts/optimize-photos.py          # incremental
 python3 scripts/optimize-photos.py --force  # rebuild all
 ```
 
 Per image this emits progressive JPEG + WebP at 480/960/1440/1920px (never
 upscaled past the original), and writes `web/manifest.json` with dimensions,
-alt text, pair keys and ready-made `srcset` strings.
+alt text, pair keys, ready-made `srcset` strings, and a `fallback` entry to use
+as the plain `<img src>`. Use `fallback` rather than indexing into `sizes` —
+a source 480px or narrower yields only one size, so `sizes[1]` would not exist.
+
+`pillow-heif` is what decodes iPhone `.heic` originals; without it the script
+says so and skips them. Sub-folders are folded into the output name, so a Meta
+export's album folders keep otherwise identical `IMG_0001.jpg` basenames
+apart.
 
 It also **strips all metadata**. Customer cars get photographed in the shop and
 in driveways; the EXIF carries GPS coordinates and camera serials that should
@@ -76,7 +83,7 @@ phone photos don't come out sideways.
 ```html
 <picture>
   <source type="image/webp" srcset="{{ srcset.webp }}" sizes="(max-width: 700px) 100vw, 700px">
-  <img src="{{ sizes[1].jpg }}" srcset="{{ srcset.jpg }}"
+  <img src="{{ fallback.jpg }}" srcset="{{ srcset.jpg }}"
        width="{{ intrinsic.width }}" height="{{ intrinsic.height }}"
        alt="{{ alt }}" loading="lazy" decoding="async">
 </picture>
