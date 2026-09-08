@@ -18,7 +18,7 @@ variants are copied into `assets/img/photos/`.
 | services | Paint booth — fresh basecoat, gloss black | `fresh-finish-in-the-booth` | masked front bumper assembly, fresh finish |
 | services | Restoration bay — classic body shell on rotisserie | `classic-body-shell-in-primer` | 60s convertible in primer on the lift |
 | about | Paint booth — downdraft spray environment | `downdraft-paint-booth` | masked vehicle inside the booth |
-| about | Frame rack — structural straightening & measurement | `rocker-and-structural-repair` | rocker/structural repair on the lift |
+| about | Frame rack — structural straightening & measurement | `rocker-and-structural-repair` | rusted-through rocker being cut out on the lift |
 | about | Detail bay — correction & finishing stations | `refinished-parts-finishing-stations` | refinished trim and lamps on the stands |
 | about | Restoration bay — long-term project builds | `long-term-restoration-bay` | Chevy II mid-build |
 | portfolio | BEFORE — barn-find condition | `dodge-d150-restoration--before` | D150 as delivered |
