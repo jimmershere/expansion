@@ -2,19 +2,38 @@
 
 Auto restoration / detailing photos for the new **appearance-unlimited.com** site.
 
-| Folder | What | Tracked in git |
-|---|---|---|
-| `originals/` | Source images exactly as received (Facebook export, camera files) | yes |
-| `web/` | Generated responsive JPEG + WebP + `manifest.json` | no — build output |
-
 ## Status
 
-**`originals/` is empty.** The photos could not be downloaded from inside the
-Claude Code session that set this up: the session's egress policy blocks all
-outbound web access, `facebook.com` included, so there is no route to the page.
-The page is <https://www.facebook.com/appearanceunlimited> (Appearance
-Unlimited, 2115 N US-31, Traverse City MI). Run the fetch step below from a
-machine with normal network access to populate it.
+**Pulled 2026-09-08.** `scripts/fetch-fb-photos.sh --browser firefox` worked from
+pop-os against <https://www.facebook.com/appearanceunlimited>: 424 photos
+covering **2024-01-30 → 2026-08-11**, in `photos/fb-raw/` (untracked — see
+below). The pull was stopped there by hand; it had not reached the end of the
+album, and re-running the script resumes, because gallery-dl skips files it has
+already written.
+
+| Folder | What | Tracked |
+|---|---|---|
+| `fb-raw/` | The raw gallery-dl pull, `<photo-id>.jpg` + `.json` sidecar carrying the post date | no — gitignored |
+| `originals/` | The 18 photos curated for the site, renamed per §2 below | not committed yet — rights check first |
+| `web/` | Build output | no |
+
+`fb-raw/` is gitignored on purpose: this repo is **public**, and those are
+customer vehicles. Nothing here has been pushed. See *Rights* at the bottom
+before committing or publishing any of it.
+
+Two things the pull established that the site does not reflect:
+
+* **The four named builds on the site have no photos in the archive.** No 1969
+  Camaro SS (Northern Light), no 1966 C10 (Yellowjacket), no 1966 Mustang
+  (Snowbird), no 1957 Bel Air (Resurrection). The yellow C10 currently on the
+  site (`assets/img/Chevyc10.png`) is a stock photo, not a shop build.
+* **There is a fully documented restoration the site does not mention** — an
+  1980s Dodge D150 ("GRYFIN"), shot from as-delivered through teardown,
+  bodywork, primer and paint to finished. It is the shop's best build story and
+  it fits a build page's six-stage gallery exactly.
+
+The archive is also body-shop heavy: essentially no detailing or paint-correction
+photos, and no clean exterior shot of the building.
 
 ## 1. Get the photos
 
