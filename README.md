@@ -15,6 +15,7 @@ RAM/SSDs/PSUs/fans/harnesses).
 | [scripts/p40-health.sh](scripts/p40-health.sh) | GPU thermal/presence watchdog, JSON for n8n |
 | gitops/ | ArgoCD app-of-apps for new floors (populated once floor3 joins) |
 | [photos/](photos/README.md) | Appearance Unlimited restoration photos for appearance-unlimited.com + the fetch/optimize pipeline |
+| [photos/site-frames.md](photos/site-frames.md) | Which site image frame got which photo, which are still empty, and what each still needs |
 | [scripts/fetch-fb-photos.sh](scripts/fetch-fb-photos.sh) | Pulls the Appearance Unlimited Facebook page photos into `photos/originals/` |
 | [scripts/optimize-photos.py](scripts/optimize-photos.py) | Responsive JPEG/WebP + manifest.json, strips EXIF/GPS |
 

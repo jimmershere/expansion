@@ -3,3 +3,12 @@
 photos/web/*
 !photos/web/.gitkeep
 __pycache__/
+
+# Raw Facebook pull (gallery-dl output + metadata). Large, and these are
+# customer vehicle photos -- this repo is public, so the raw archive stays
+# local. Only the curated, renamed sources in photos/originals/ are candidates
+# for tracking, and only once the rights check in photos/README.md is done.
+photos/fb-raw/
+
+# Local venv for gallery-dl / Pillow
+.venv/
